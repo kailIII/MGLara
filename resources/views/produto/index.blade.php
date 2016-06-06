@@ -1,56 +1,51 @@
 @extends('layouts.default')
 @section('content')
 <nav class="navbar navbar-default navbar-fixed-top" id="submenu">
-    <div class="container-fluid"> 
+    <div class="container-fluid">
         <ul class="nav navbar-nav">
             <li>
-                <a href="<?php echo url('produto/create');?>"><span class="glyphicon glyphicon-plus"></span> Novo</a>
-            </li> 
+                <a href="<?php echo url('produto/create'); ?>"><span class="glyphicon glyphicon-plus"></span> Novo</a>
+            </li>
         </ul>
     </div>
 </nav>
 <h1 class="header">Produtos</h1>
 <hr>
 <?php
-use MGLara\Models\SecaoProduto;
 use MGLara\Models\FamiliaProduto;
 use MGLara\Models\GrupoProduto;
-use MGLara\Models\SubGrupoProduto;
-use MGLara\Models\ProdutoVariacao;
+use MGLara\Models\SecaoProduto;
 $filtro = Request::session()->get('produto.index');
 
-$secoes     = [''=>''] + SecaoProduto::lists('secaoproduto', 'codsecaoproduto')->all();
+$secoes = ['' => ''] + SecaoProduto::lists('secaoproduto', 'codsecaoproduto')->all();
 
-$familias   = [''=>''];
-if (!empty($filtro['codsecaoproduto']))
-{
-    $secao = SecaoProduto::findOrFail($filtro['codsecaoproduto']);
-    $familias += $secao->FamiliaProdutoS()->lists('familiaproduto', 'codfamiliaproduto')->all();
+$familias = ['' => ''];
+if (!empty($filtro['codsecaoproduto'])) {
+	$secao = SecaoProduto::findOrFail($filtro['codsecaoproduto']);
+	$familias += $secao->FamiliaProdutoS()->lists('familiaproduto', 'codfamiliaproduto')->all();
 }
 
-$grupos     = [''=>''];
-if (!empty($filtro['codfamiliaproduto']))
-{
-    $fam = FamiliaProduto::findOrFail($filtro['codfamiliaproduto']);
-    $grupos += $fam->GrupoProdutoS()->lists('grupoproduto', 'codgrupoproduto')->all();
+$grupos = ['' => ''];
+if (!empty($filtro['codfamiliaproduto'])) {
+	$fam = FamiliaProduto::findOrFail($filtro['codfamiliaproduto']);
+	$grupos += $fam->GrupoProdutoS()->lists('grupoproduto', 'codgrupoproduto')->all();
 }
 
-$subgrupos  = [''=>''];
-if (!empty($filtro['codgrupoproduto']))
-{
-    $gp = GrupoProduto::findOrFail($filtro['codgrupoproduto']);
-    $subgrupos += $gp->SubGrupoProdutoS()->lists('subgrupoproduto', 'codsubgrupoproduto')->all();
+$subgrupos = ['' => ''];
+if (!empty($filtro['codgrupoproduto'])) {
+	$gp = GrupoProduto::findOrFail($filtro['codgrupoproduto']);
+	$subgrupos += $gp->SubGrupoProdutoS()->lists('subgrupoproduto', 'codsubgrupoproduto')->all();
 }
 
 ?>
 <div class="search-bar">
-{!! Form::model($filtro, 
+{!! Form::model($filtro,
 [
-    'route' => 'produto.index', 
-    'method' => 'GET', 
-    'class' => 'form-inline', 
-    'id' => 'produto-search', 
-    'role' => 'search', 
+    'route' => 'produto.index',
+    'method' => 'GET',
+    'class' => 'form-inline',
+    'id' => 'produto-search',
+    'role' => 'search',
     'autocomplete' => 'off'
 ])!!}
     <div class="form-group">
@@ -99,9 +94,8 @@ if (!empty($filtro['codgrupoproduto']))
 
     <div class="form-group">
         {!! Form::select('site', ['' => '', 'true' => 'No Site', 'false' => 'Fora do Site'], null, ['style' => 'width: 120px', 'id'=>'site']) !!}
-    </div>      
+    </div>
 
-    
     <div class="form-group">
         {!! Form::text('codncm', null, ['class' => 'form-control', 'id'=> 'codncm', 'placeholder' => 'NCM', 'style'=> 'width: 450px;']) !!}
     </div>
@@ -148,9 +142,9 @@ if (!empty($filtro['codgrupoproduto']))
                     <a href="{{ url("ncm/$row->codncm") }}">
                         {{ formataNcm($row->Ncm->ncm) }}
                     </a>
-                </div>    
+                </div>
                 @endif
-            </div>                            
+            </div>
             <div class="col-md-4">
                 <a href="{{ url("produto/$row->codproduto") }}">
                     <strong>{{ $row->produto }}</strong>
@@ -183,7 +177,7 @@ if (!empty($filtro['codgrupoproduto']))
                     </a>
                     »
                     <span class="text-muted">{{ $row->referencia }}</span>
-                </div>    
+                </div>
                 @endif
             </div>
             <div class="col-md-2">
@@ -195,7 +189,7 @@ if (!empty($filtro['codgrupoproduto']))
                         {{ $row->UnidadeMedida->sigla }}
                     </div>
                 </div>
-                
+
                 @foreach($row->ProdutoEmbalagemS()->orderBy('quantidade')->get() as $pe)
                     <div class="row">
                         @if (empty($pe->preco))
@@ -204,7 +198,7 @@ if (!empty($filtro['codgrupoproduto']))
                             </i>
                         @else
                             <strong class="col-md-6 text-right">
-                                {{ formataNumero($pe->preco) }}                            
+                                {{ formataNumero($pe->preco) }}
                             </strong>
                         @endif
                         <div class="col-md-6 text-left">
@@ -216,13 +210,13 @@ if (!empty($filtro['codgrupoproduto']))
             </div>
             <div class="col-md-5 small text-muted">
                 <?php
-                $pvs = $row->ProdutoVariacaoS()->with(['ProdutoBarraS' => function ($q) {
-                    $q->with(['ProdutoEmbalagem' => function ($q2) {
-                        $q2->orderBy('quantidade', 'asc');
-                        $q2->with('UnidadeMedida');
-                    }])->orderBy('barras');
-                }])->orderBy('variacao')->get();
-                ?>
+$pvs = $row->ProdutoVariacaoS()->with(['ProdutoBarraS' => function ($q) {
+	$q->with(['ProdutoEmbalagem' => function ($q2) {
+		$q2->orderBy('quantidade', 'asc');
+		$q2->with('UnidadeMedida');
+	}])->orderBy('barras');
+}])->orderBy('variacao')->get();
+?>
                 <table class="table table-striped table-condensed table-hover" style="margin-bottom: 1px">
                 @foreach ($pvs as $pv)
                     <tr>
@@ -257,14 +251,14 @@ if (!empty($filtro['codgrupoproduto']))
                 @endforeach
                 </table>
             </div>
-        </div>    
+        </div>
       </div>
     @endforeach
     @if (count($model) === 0)
         <h3>Nenhum registro encontrado!</h3>
-    @endif    
+    @endif
   </div>
-  <?php echo $model->appends(Request::all())->render();?>
+  <?php echo $model->appends(Request::all())->render(); ?>
 </div>
 @section('inscript')
 <style type="text/css">
@@ -292,44 +286,44 @@ function atualizaFiltro()
         data: frmValues
     })
     .done(function (data) {
-        $('#items').html(jQuery(data).find('#items').html()); 
+        $('#items').html(jQuery(data).find('#items').html());
     })
     .fail(function () {
         console.log('Erro no filtro');
     });
-    event.preventDefault(); 
-    
+    event.preventDefault();
+
 }
-    
+
 $(document).ready(function() {
     $('ul.pagination').removeClass('hide');
-    
+
     $("#produto-search").on("change", function (event) {
         atualizaFiltro();
     });
-    
+
     $(document).on('dp.change', '#criacao_de, #criacao_ate, #alteracao_de, #alteracao_ate', function() {
         atualizaFiltro();
     });
-    
+
     $('#inativo').select2({
         placeholder: 'Inativo',
         allowClear: true,
         closeOnSelect: true
     });
-    
+
     $('#codtributacao').select2({
         placeholder: 'Tributação',
         allowClear:true,
         closeOnSelect:true
     });
-    
+
     $('#site').select2({
         placeholder: 'Site',
         allowClear:true,
         closeOnSelect:true
     });
-    
+
     $('#preco_de, #preco_ate').autoNumeric('init', {aSep:'.', aDec:',', altDec:'.' });
     $('#criacao_de, #criacao_ate, #alteracao_de, #alteracao_ate').datetimepicker({
         useCurrent: false,
@@ -349,15 +343,15 @@ $(document).ready(function() {
             markup    += "<span>" + item.descricao + "</span>";
             return markup;
         },
-        formatSelection:function(item) { 
-            return item.ncm + "&nbsp;" + item.descricao; 
+        formatSelection:function(item) {
+            return item.ncm + "&nbsp;" + item.descricao;
         },
         ajax:{
             url:baseUrl+"/ncm/ajax",
             dataType:'json',
             quietMillis:500,
-            data:function(term, page) { 
-                return {q: term}; 
+            data:function(term, page) {
+                return {q: term};
             },
             results:function(data, page) {
                 var more = (page * 20) < data.total;
@@ -374,8 +368,8 @@ $(document).ready(function() {
             });
         },
         width:'resolve'
-    });    
-    
+    });
+
     $('#codmarca').select2({
         minimumInputLength:1,
         allowClear:true,
@@ -387,15 +381,15 @@ $(document).ready(function() {
             markup    += "</div>";
             return markup;
         },
-        formatSelection:function(item) { 
-            return item.marca; 
+        formatSelection:function(item) {
+            return item.marca;
         },
         ajax:{
             url:baseUrl+"/marca/ajax",
             dataType:'json',
             quietMillis:500,
-            data:function(term,page) { 
-                return {q: term}; 
+            data:function(term,page) {
+                return {q: term};
             },
             results:function(data,page) {
                 var more = (page * 20) < data.total;
@@ -413,7 +407,7 @@ $(document).ready(function() {
         },
         width:'resolve'
     });
-    
+
     $('#codsecaoproduto').select2({
         placeholder: 'Seção',
         allowClear: true,
@@ -434,7 +428,6 @@ $(document).ready(function() {
         allowClear: true,
         closeOnSelect: true
     });
-    
 });
 </script>
 @endsection
