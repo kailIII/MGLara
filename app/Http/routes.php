@@ -24,160 +24,161 @@ Route::get('estoque/gera-movimento-produto/{id}', 'EstoqueController@geraMovimen
 Route::get('estoque/gera-movimento-periodo', 'EstoqueController@geraMovimentoPeriodo');
 
 Route::group(['middleware' => 'auth'], function () {
-	/* Página inicial */
-	Route::resource('home', 'DashboardController');
-	Route::resource('/', 'DashboardController');
+    /* Página inicial */
+    Route::resource('home', 'DashboardController');
+    Route::resource('/', 'DashboardController');
 
-	/* Integracao Dominio */
-	Route::get('dominio/estoque', 'DominioController@estoque');
-	Route::resource('dominio', 'DominioController');
+    /* Integracao Dominio */
+    Route::get('dominio/estoque', 'DominioController@estoque');
+    Route::resource('dominio', 'DominioController');
 
-	/* Usuários */
-	Route::resource('usuario', 'UsuarioController');
-	Route::resource('usuario/{codusuario}/permissao', 'UsuarioController@permissao');
-	Route::resource('usuario/attach-permissao', 'UsuarioController@attachPermissao');
-	Route::resource('usuario/detach-permissao', 'UsuarioController@detachPermissao');
+    /* Usuários */
+    Route::resource('usuario', 'UsuarioController');
+    Route::resource('usuario/{codusuario}/permissao', 'UsuarioController@permissao');
+    Route::resource('usuario/attach-permissao', 'UsuarioController@attachPermissao');
+    Route::resource('usuario/detach-permissao', 'UsuarioController@detachPermissao');
 
-	/* Grupos de usuários */
-	Route::resource('grupo-usuario', 'GrupoUsuarioController');
-	Route::post('grupo-usuario/attach-permissao', 'GrupoUsuarioController@attachPermissao');
-	Route::post('grupo-usuario/detach-permissao', 'GrupoUsuarioController@detachPermissao');
+    /* Grupos de usuários */
+    Route::resource('grupo-usuario', 'GrupoUsuarioController');
+    Route::post('grupo-usuario/attach-permissao', 'GrupoUsuarioController@attachPermissao');
+    Route::post('grupo-usuario/detach-permissao', 'GrupoUsuarioController@detachPermissao');
 
-	/* Permissões */
-	Route::resource('permissao', 'PermissaoController');
+    /* Permissões */
+    Route::resource('permissao', 'PermissaoController');
 
-	/* Pessoas */
-	Route::resource('pessoa', 'PessoaController');
-	Route::get('pessoa-ajax', 'PessoaController@ajax');
+    /* Pessoas */
+    Route::resource('pessoa', 'PessoaController');
+    Route::get('pessoa-ajax', 'PessoaController@ajax');
 
-	/* Filiais */
-	Route::resource('filial', 'FilialController');
-	Route::get('filial-ajax', 'FilialController@ajax');
+    /* Filiais */
+    Route::resource('filial', 'FilialController');
+    Route::get('filial-ajax', 'FilialController@ajax');
 
-	/* Estoque mês */
-	Route::resource('estoque-mes', 'EstoqueMesController');
+    /* Estoque mês */
+    Route::resource('estoque-mes', 'EstoqueMesController');
 
-	/* EstoqueSaldo */
-	Route::resource('estoque-saldo', 'EstoqueSaldoController');
-	Route::get('estoque-saldo/{id}/zera', 'EstoqueSaldoController@zera');
+    /* EstoqueSaldo */
+    Route::resource('estoque-saldo', 'EstoqueSaldoController');
+    Route::get('estoque-saldo/{id}/zera', 'EstoqueSaldoController@zera');
 
-	/* GrupoProduto */
-	Route::post('grupo-produto/inativo', 'GrupoProdutoController@inativo');
-	Route::resource('grupo-produto/{id}/busca-codproduto', 'GrupoProdutoController@buscaCodproduto');
-	Route::resource('grupo-produto', 'GrupoProdutoController');
+    /* GrupoProduto */
+    Route::post('grupo-produto/inativo', 'GrupoProdutoController@inativo');
+    Route::resource('grupo-produto/{id}/busca-codproduto', 'GrupoProdutoController@buscaCodproduto');
+    Route::resource('grupo-produto', 'GrupoProdutoController');
 
-	/* NCM */
-	Route::get('ncm/ajax', 'NcmController@ajax');
-	Route::resource('ncm', 'NcmController');
+    /* NCM */
+    Route::get('ncm/ajax', 'NcmController@ajax');
+    Route::resource('ncm', 'NcmController');
 
-	/* CEST */
-	Route::get('cest/ajax', 'CestController@ajax');
-	Route::resource('cest', 'CestController');
+    /* CEST */
+    Route::get('cest/ajax', 'CestController@ajax');
+    Route::resource('cest', 'CestController');
 
-	/* Marca */
-	Route::get('marca/ajax', 'MarcaController@ajax');
-	Route::resource('marca/inativo', 'MarcaController@inativo');
-	Route::resource('marca/{id}/busca-codproduto', 'MarcaController@buscaCodproduto');
-	Route::resource('marca', 'MarcaController');
+    /* Marca */
+    Route::get('marca/ajax', 'MarcaController@ajax');
+    Route::resource('marca/inativo', 'MarcaController@inativo');
+    Route::resource('marca/{id}/busca-codproduto', 'MarcaController@buscaCodproduto');
+    Route::resource('marca', 'MarcaController');
 
-	/* SubGrupoProduto */
-	Route::resource('sub-grupo-produto/{id}/busca-codproduto', 'SubGrupoProdutoController@buscaCodproduto');
-	Route::get('sub-grupo-produto/ajax', 'SubGrupoProdutoController@ajax');
-	Route::post('sub-grupo-produto/inativo', 'SubGrupoProdutoController@inativo');
-	Route::resource('sub-grupo-produto', 'SubGrupoProdutoController');
+    /* SubGrupoProduto */
+    Route::resource('sub-grupo-produto/{id}/busca-codproduto', 'SubGrupoProdutoController@buscaCodproduto');
+    Route::get('sub-grupo-produto/ajax', 'SubGrupoProdutoController@ajax');
+    Route::post('sub-grupo-produto/inativo', 'SubGrupoProdutoController@inativo');
+    Route::resource('sub-grupo-produto', 'SubGrupoProdutoController');
 
-	/* Produto */
-	Route::get('produto/cobre-estoque-negativo', 'ProdutoController@cobreEstoqueNegativo');
-	Route::resource('produto/busca-barras', 'ProdutoController@buscaPorBarras');
-	Route::resource('produto/ajax', 'ProdutoController@ajaxProduto');
-	Route::resource('produto/estoque-saldo', 'ProdutoController@estoqueSaldo');
-	Route::resource('produto/inativo', 'ProdutoController@inativo');
-	Route::resource('produto/{id}/recalcula-movimento-estoque', 'ProdutoController@recalculaMovimentoEstoque');
-	Route::resource('produto/{id}/recalcula-custo-medio', 'ProdutoController@recalculaCustoMedio');
-	Route::resource('produto/{id}/cobre-estoque-negativo', 'ProdutoController@cobreEstoqueNegativo');
+    /* Produto */
+    Route::get('produto/cobre-estoque-negativo', 'ProdutoController@cobreEstoqueNegativo');
+    Route::resource('produto/busca-barras', 'ProdutoController@buscaPorBarras');
+    Route::resource('produto/ajax', 'ProdutoController@ajaxProduto');
+    Route::resource('produto/estoque-saldo', 'ProdutoController@estoqueSaldo');
+    Route::resource('produto/inativo', 'ProdutoController@inativo');
+    Route::resource('produto/{id}/recalcula-movimento-estoque', 'ProdutoController@recalculaMovimentoEstoque');
+    Route::resource('produto/{id}/recalcula-custo-medio', 'ProdutoController@recalculaCustoMedio');
+    Route::resource('produto/{id}/cobre-estoque-negativo', 'ProdutoController@cobreEstoqueNegativo');
 
-	Route::resource('produto', 'ProdutoController');
+    Route::resource('produto', 'ProdutoController');
 
-	/* Estoque Saldo Conferencia */
-	Route::resource('estoque-saldo-conferencia', 'EstoqueSaldoConferenciaController');
+    /* Estoque Saldo Conferencia */
+    Route::resource('estoque-saldo-conferencia', 'EstoqueSaldoConferenciaController');
 
-	/* Produto Barra*/
-	Route::resource('produto-barra', 'ProdutoBarraController');
+    /* Produto Barra*/
+    Route::resource('produto-barra', 'ProdutoBarraController');
 
-	/* Produto Barra*/
-	Route::resource('produto-embalagem', 'ProdutoEmbalagemController');
+    /* Produto Barra*/
+    Route::resource('produto-embalagem', 'ProdutoEmbalagemController');
 
-	/* Pais */
-	Route::resource('pais', 'PaisController');
+    /* Pais */
+    Route::resource('pais', 'PaisController');
 
-	/* Estado */
-	Route::resource('estado', 'EstadoController');
+    /* Estado */
+    Route::resource('estado', 'EstadoController');
 
-	/* Cidades */
-	Route::resource('cidade/ajax', 'CidadeController@ajax');
-	Route::resource('cidade', 'CidadeController');
+    /* Cidades */
+    Route::resource('cidade/ajax', 'CidadeController@ajax');
+    Route::resource('cidade', 'CidadeController');
 
-	/* Unidades de medida */
-	Route::resource('unidade-medida', 'UnidadeMedidaController');
+    /* Unidades de medida */
+    Route::resource('unidade-medida', 'UnidadeMedidaController');
 
-	/* Portadores */
-	Route::resource('portador', 'PortadorController');
+    /* Portadores */
+    Route::resource('portador', 'PortadorController');
 
-	/* Tributações */
-	Route::resource('tributacao', 'TributacaoController');
+    /* Tributações */
+    Route::resource('tributacao', 'TributacaoController');
 
-	/* Grupos de cliente */
-	Route::resource('grupo-cliente', 'GrupoClienteController');
+    /* Grupos de cliente */
+    Route::resource('grupo-cliente', 'GrupoClienteController');
 
-	/* Tipos de produto */
-	Route::resource('tipo-produto', 'TipoProdutoController');
+    /* Tipos de produto */
+    Route::resource('tipo-produto', 'TipoProdutoController');
 
-	/* Formas de pagamento */
-	Route::resource('forma-pagamento', 'FormaPagamentoController');
+    /* Formas de pagamento */
+    Route::resource('forma-pagamento', 'FormaPagamentoController');
 
-	/* Histórico de preços */
-	Route::resource('produto-historico-preco', 'ProdutoHistoricoPrecoController');
+    /* Histórico de preços */
+    Route::resource('produto-historico-preco', 'ProdutoHistoricoPrecoController');
 
-	/* Nota fiscal produto barra */
-	Route::resource('nota-fiscal-produto-barra', 'NotaFiscalProdutoBarraController');
+    /* Nota fiscal produto barra */
+    Route::resource('nota-fiscal-produto-barra', 'NotaFiscalProdutoBarraController');
 
-	/* Negócio produto barra */
-	Route::resource('negocio-produto-barra', 'NegocioProdutoBarraController');
+    /* Negócio produto barra */
+    Route::resource('negocio-produto-barra', 'NegocioProdutoBarraController');
 
-	/* Seção Produto */
-	Route::post('secao-produto/inativo', 'SecaoProdutoController@inativo');
-	Route::resource('secao-produto', 'SecaoProdutoController');
+    /* Seção Produto */
+    Route::post('secao-produto/inativo', 'SecaoProdutoController@inativo');
+    Route::resource('secao-produto', 'SecaoProdutoController');
 
-	/* Família Produto */
-	Route::post('familia-produto/inativo', 'FamiliaProdutoController@inativo');
-	Route::resource('familia-produto', 'FamiliaProdutoController');
+    /* Família Produto */
+    Route::post('familia-produto/inativo', 'FamiliaProdutoController@inativo');
+    Route::resource('familia-produto', 'FamiliaProdutoController');
 
-	/* Imagem */
-	Route::resource('imagem/produto/{id}/delete', 'ImagemController@produtoDelete');
-	Route::post('imagem/produtostore/{id}', 'ImagemController@produtoStore');
-	Route::resource('imagem/produto', 'ImagemController@produto');
-	Route::resource('imagem/edit', 'ImagemController@edit');
-	Route::resource('imagem/lixeira', 'ImagemController@lixeira');
-	Route::get('imagem/esvaziar-lixeira', 'ImagemController@esvaziarLixeira');
-	Route::post('imagem/inativo', 'ImagemController@inativo');
-	Route::resource('imagem', 'ImagemController');
+    /* Imagem */
+    Route::resource('imagem/produto/{id}/delete', 'ImagemController@produtoDelete');
+    Route::post('imagem/produtostore/{id}', 'ImagemController@produtoStore');
+    Route::resource('imagem/produto', 'ImagemController@produto');
+    Route::resource('imagem/edit', 'ImagemController@edit');
+    Route::resource('imagem/lixeira', 'ImagemController@lixeira');
+    Route::get('imagem/esvaziar-lixeira', 'ImagemController@esvaziarLixeira');
+    Route::post('imagem/inativo', 'ImagemController@inativo');
+    Route::resource('imagem', 'ImagemController');
 
-	/* Nota Fiscal */
-	Route::resource('nota-fiscal', 'NotaFiscalController');
+    /* Nota Fiscal */
+    Route::resource('nota-fiscal', 'NotaFiscalController');
 
-	/* Estoque Movimento */
-	Route::post('estoque-movimento/create/{codestoquemes?}', 'EstoqueMovimentoController@create');
-	Route::resource('estoque-movimento', 'EstoqueMovimentoController');
+    /* Estoque Movimento */
+    Route::post('estoque-movimento/create/{codestoquemes?}', 'EstoqueMovimentoController@create');
+    Route::resource('estoque-movimento', 'EstoqueMovimentoController');
 
-	/* Gerador de Codigo */
-	Route::get('gerador-codigo/model/{tabela}', 'GeradorCodigoController@model');
-	//Route::resource('gerador-codigo','GeradorCodigoController');
+    /* Gerador de Codigo */
+    Route::get('gerador-codigo/model/{tabela}', 'GeradorCodigoController@model');
+    //Route::resource('gerador-codigo','GeradorCodigoController');
 
-	/* Auxiliares */
-	Route::resource('printers', 'UsuarioController@printers');
+    /* Auxiliares */
+    Route::resource('printers', 'UsuarioController@printers');
 
 });
 
 Route::group(['prefix' => 'negocios', 'as' => 'negocios::', 'middleware' => 'auth'], function () {
-	Route::get('/', ['as' => 'index', 'uses' => 'NegociosController@index']);
+    Route::get('/', ['as' => 'index', 'uses' => 'NegociosController@index']);
+    Route::get('/create', ['as' => 'create', 'uses' => 'NegociosController@create']);
 });
