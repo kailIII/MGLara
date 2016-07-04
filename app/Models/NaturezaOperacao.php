@@ -5,16 +5,16 @@ namespace MGLara\Models;
 /**
  * Campos
  * @property  bigint                         $codnaturezaoperacao                NOT NULL DEFAULT nextval('tblnaturezaoperacao_codnaturezaoperacao_seq'::regclass)
- * @property  varchar(50)                    $naturezaoperacao                   
- * @property  bigint                         $codoperacao                        
+ * @property  varchar(50)                    $naturezaoperacao
+ * @property  bigint                         $codoperacao
  * @property  boolean                        $emitida                            NOT NULL DEFAULT false
- * @property  varchar(500)                   $observacoesnf                      
- * @property  timestamp                      $alteracao                          
- * @property  bigint                         $codusuarioalteracao                
- * @property  timestamp                      $criacao                            
- * @property  bigint                         $codusuariocriacao                  
- * @property  varchar(300)                   $mensagemprocom                     
- * @property  bigint                         $codnaturezaoperacaodevolucao       
+ * @property  varchar(500)                   $observacoesnf
+ * @property  timestamp                      $alteracao
+ * @property  bigint                         $codusuarioalteracao
+ * @property  timestamp                      $criacao
+ * @property  bigint                         $codusuariocriacao
+ * @property  varchar(300)                   $mensagemprocom
+ * @property  bigint                         $codnaturezaoperacaodevolucao
  * @property  bigint                         $codtipotitulo                      NOT NULL
  * @property  bigint                         $codcontacontabil                   NOT NULL
  * @property  smallint                       $finnfe                             NOT NULL DEFAULT 1
@@ -23,10 +23,10 @@ namespace MGLara\Models;
  * @property  boolean                        $estoque                            NOT NULL DEFAULT true - Define se a natureza movimenta o estoque
  *
  * Chaves Estrangeiras
- * @property  ContaContabil                  $ContaContabil                 
- * @property  EstoqueMovimentoTipo           $EstoqueMovimentoTipo          
- * @property  NaturezaOperacao               $NaturezaOperacaoDevolucao              
- * @property  TipoTitulo                     $TipoTitulo                    
+ * @property  ContaContabil                  $ContaContabil
+ * @property  EstoqueMovimentoTipo           $EstoqueMovimentoTipo
+ * @property  NaturezaOperacao               $NaturezaOperacaoDevolucao
+ * @property  TipoTitulo                     $TipoTitulo
  * @property  Usuario                        $UsuarioAlteracao
  * @property  Usuario                        $UsuarioCriacao
  *
@@ -40,9 +40,9 @@ namespace MGLara\Models;
 
 class NaturezaOperacao extends MGModel
 {
-    protected $table = 'tblnaturezaoperacao';
+    protected $table      = 'tblnaturezaoperacao';
     protected $primaryKey = 'codnaturezaoperacao';
-    protected $fillable = [
+    protected $fillable   = [
         'naturezaoperacao',
         'codoperacao',
         'emitida',
@@ -60,7 +60,6 @@ class NaturezaOperacao extends MGModel
         'alteracao',
         'criacao',
     ];
-
 
     // Chaves Estrangeiras
     public function ContaContabil()
@@ -93,7 +92,6 @@ class NaturezaOperacao extends MGModel
         return $this->belongsTo(Usuario::class, 'codusuariocriacao', 'codusuario');
     }
 
-
     // Tabelas Filhas
     public function NaturezaOperacaoDevolucaoS()
     {
@@ -120,5 +118,9 @@ class NaturezaOperacao extends MGModel
         return $this->hasMany(TributacaoNaturezaOperacao::class, 'codnaturezaoperacao', 'codnaturezaoperacao');
     }
 
+    public static function ordenadoPorNome()
+    {
+        return self::orderBy('naturezaoperacao', 'asc');
+    }
 
 }

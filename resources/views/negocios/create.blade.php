@@ -23,7 +23,9 @@ Novo Negócio
                 name="filial"
                 id="filial">
                 <option value=""></option>
-                <option value="0">Consumidor</option>
+                @foreach($filialCollection as $filial)
+                <option value="{{ $filial->codfilial }}">{{ $filial->filial }}</option>
+                @endforeach
             </select>
         </div>
     </div>
@@ -37,7 +39,9 @@ Novo Negócio
                 name="local-estoque"
                 id="local-estoque">
                 <option value=""></option>
-                <option value="0">Local Estoque</option>
+                @foreach($estoqueLocalCollection as $estoqueLocal)
+                <option value="{{ $estoqueLocal->codestoquelocal }}">{{ $estoqueLocal->Filial->filial }}</option>
+                @endforeach
             </select>
         </div>
     </div>
@@ -51,7 +55,9 @@ Novo Negócio
                 name="natureza-de-operacao"
                 id="natureza-de-operacao">
                 <option value=""></option>
-                <option value="0">Natureza de Operação</option>
+                @foreach($naturezaOperacaoCollection as $naturezaOperacao)
+                <option value="{{ $naturezaOperacao->codnaturezaoperacao }}">{{ $naturezaOperacao->naturezaoperacao }}</option>
+                @endforeach
             </select>
         </div>
     </div>
@@ -65,7 +71,9 @@ Novo Negócio
                 name="pessoa"
                 id="pessoa">
                 <option value=""></option>
-                <option value="0">Pessoa</option>
+                @foreach($pessoaCollection as $pessoa)
+                <option value="{{ $pessoa->codpessoa }}">{{ $pessoa->pessoa }}</option>
+                @endforeach
             </select>
         </div>
     </div>

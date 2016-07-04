@@ -5,34 +5,34 @@ namespace MGLara\Models;
 /**
  * Campos
  * @property  bigint                         $codfilial                          NOT NULL DEFAULT nextval('tblfilial_codfilial_seq'::regclass)
- * @property  bigint                         $codempresa                         
- * @property  bigint                         $codpessoa                          
+ * @property  bigint                         $codempresa
+ * @property  bigint                         $codpessoa
  * @property  varchar(20)                    $filial                             NOT NULL
  * @property  boolean                        $emitenfe                           NOT NULL DEFAULT false
- * @property  varchar(100)                   $acbrnfemonitorcaminho              
- * @property  varchar(100)                   $acbrnfemonitorcaminhorede          
- * @property  timestamp                      $acbrnfemonitorbloqueado            
- * @property  bigint                         $acbrnfemonitorcodusuario           
- * @property  numeric(7,0)                   $empresadominio                     
- * @property  varchar(20)                    $acbrnfemonitorip                   
- * @property  bigint                         $acbrnfemonitorporta                
- * @property  varchar(500)                   $odbcnumeronotafiscal               
+ * @property  varchar(100)                   $acbrnfemonitorcaminho
+ * @property  varchar(100)                   $acbrnfemonitorcaminhorede
+ * @property  timestamp                      $acbrnfemonitorbloqueado
+ * @property  bigint                         $acbrnfemonitorcodusuario
+ * @property  numeric(7,0)                   $empresadominio
+ * @property  varchar(20)                    $acbrnfemonitorip
+ * @property  bigint                         $acbrnfemonitorporta
+ * @property  varchar(500)                   $odbcnumeronotafiscal
  * @property  smallint                       $crt                                NOT NULL DEFAULT 1
- * @property  timestamp                      $alteracao                          
- * @property  bigint                         $codusuarioalteracao                
- * @property  timestamp                      $criacao                            
- * @property  bigint                         $codusuariocriacao                  
- * @property  varchar(32)                    $nfcetoken                          
- * @property  varchar(6)                     $nfcetokenid                        
+ * @property  timestamp                      $alteracao
+ * @property  bigint                         $codusuarioalteracao
+ * @property  timestamp                      $criacao
+ * @property  bigint                         $codusuariocriacao
+ * @property  varchar(32)                    $nfcetoken
+ * @property  varchar(6)                     $nfcetokenid
  * @property  smallint                       $nfeambiente                        NOT NULL DEFAULT 2
- * @property  varchar(50)                    $senhacertificado                   
- * @property  bigint                         $ultimonsu                          
- * @property  varchar(200)                   $tokenibpt                          
+ * @property  varchar(50)                    $senhacertificado
+ * @property  bigint                         $ultimonsu
+ * @property  varchar(200)                   $tokenibpt
  *
  * Chaves Estrangeiras
- * @property  Empresa                        $Empresa                       
- * @property  Pessoa                         $Pessoa                        
- * @property  Usuario                        $AcbrNfeMonitorUsuario                       
+ * @property  Empresa                        $Empresa
+ * @property  Pessoa                         $Pessoa
+ * @property  Usuario                        $AcbrNfeMonitorUsuario
  * @property  Usuario                        $UsuarioAlteracao
  * @property  Usuario                        $UsuarioCriacao
  *
@@ -78,18 +78,19 @@ class Filial extends MGModel
         'criacao',
     ];
 
-    public function validate() {
-        
+    public function validate()
+    {
+
         $this->_regrasValidacao = [
-            'filial' => 'required|min:5', 
+            'filial' => 'required|min:5',
         ];
-    
+
         $this->_mensagensErro = [
             'filial.required' => 'Preencha o campo filial',
         ];
-        
+
         return parent::validate();
-    }  
+    }
 
     // Chaves Estrangeiras
     public function Empresa()
@@ -116,7 +117,6 @@ class Filial extends MGModel
     {
         return $this->belongsTo(Usuario::class, 'codusuario', 'codusuariocriacao');
     }
-
 
     // Tabelas Filhas
     public function PortadorS()
@@ -168,12 +168,16 @@ class Filial extends MGModel
     {
         return $this->hasMany(Usuario::class, 'codfilial', 'codfilial');
     }
-    
+
     public function scopeFilial($query, $filial)
     {
-        if (trim($filial) != "")
-        {
+        if (trim($filial) != "") {
             $query->where('filial', "ILIKE", "%$filial%");
         }
-    }     
+    }
+
+    public static function filiaisOrdenadoPorNome()
+    {
+        return self::orderBy('filial', 'asc');
+    }
 }

@@ -7,14 +7,14 @@ namespace MGLara\Models;
  * @property  bigint                         $codestoquelocal                    NOT NULL DEFAULT nextval('tblestoquelocal_codestoquelocal_seq'::regclass)
  * @property  varchar(50)                    $estoquelocal                       NOT NULL
  * @property  bigint                         $codfilial                          NOT NULL
- * @property  timestamp                      $inativo                            
- * @property  timestamp                      $alteracao                          
- * @property  bigint                         $codusuarioalteracao                
- * @property  timestamp                      $criacao                            
- * @property  bigint                         $codusuariocriacao                  
+ * @property  timestamp                      $inativo
+ * @property  timestamp                      $alteracao
+ * @property  bigint                         $codusuarioalteracao
+ * @property  timestamp                      $criacao
+ * @property  bigint                         $codusuariocriacao
  *
  * Chaves Estrangeiras
- * @property  Filial                         $Filial                        
+ * @property  Filial                         $Filial
  * @property  Usuario                        $UsuarioAlteracao
  * @property  Usuario                        $UsuarioCriacao
  *
@@ -39,23 +39,32 @@ class EstoqueLocal extends MGModel
         'criacao',
     ];
 
-    public function validate() {
-        
+    public function validate()
+    {
+
         $this->_regrasValidacao = [
-            //'field' => 'required|min:2', 
+            //'field' => 'required|min:2',
         ];
-    
+
         $this->_mensagensErro = [
             //'field.required' => 'Preencha o campo',
         ];
-        
+
         return parent::validate();
-    } 
-    
+    }
+
     // Chaves Estrangeiras
     public function Filial()
     {
         return $this->belongsTo(Filial::class, 'codfilial', 'codfilial');
+    }
+
+    public static function comFilialOrganizadoPorNomeDaFilial()
+    {
+        $filiais = self::join('tblfilial as filial', 'filial.codfilial', '=', 'tblestoquelocal.codfilial')
+            ->orderBy('filial.filial', 'asc');
+
+        return $filiais;
     }
 
     public function UsuarioAlteracao()
@@ -67,7 +76,6 @@ class EstoqueLocal extends MGModel
     {
         return $this->belongsTo(Usuario::class, 'codusuario', 'codusuariocriacao');
     }
-
 
     // Tabelas Filhas
     public function EstoqueLocalProdutoS()
@@ -92,13 +100,12 @@ class EstoqueLocal extends MGModel
             ->orderBy('estoquelocal', 'ASC')
             ->paginate(20);
     }
-    
+
     public function scopeCodestoquelocal($query, $codestoquelocal)
     {
-        if ($codestoquelocal)
-        {
+        if ($codestoquelocal) {
             $query->where('codestoquelocal', "$codestoquelocal");
         }
-    }     
+    }
 
 }
