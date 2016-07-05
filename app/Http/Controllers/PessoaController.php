@@ -3,13 +3,11 @@
 namespace MGLara\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use MGLara\Http\Requests;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use MGLara\Http\Controllers\Controller;
-use MGLara\Models\Pessoa;
 use MGLara\Models\CobrancaHistorico;
+use MGLara\Models\Pessoa;
 use MGLara\Models\RegistroSpc;
 
 class PessoaController extends Controller
@@ -19,18 +17,19 @@ class PessoaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $model = Pessoa::filterAndPaginate(
-            $request->get('id'), 
-            $request->get('pessoa'), 
-            $request->get('cnpj'), 
-            $request->get('email'), 
-            $request->get('telefone'), 
-            $request->get('inativo'), 
-            $request->get('cidade'), 
+            $request->get('id'),
+            $request->get('pessoa'),
+            $request->get('cnpj'),
+            $request->get('email'),
+            $request->get('telefone'),
+            $request->get('inativo'),
+            $request->get('cidade'),
             $request->get('grupocliente')
         );
-        
+
         return view('pessoa.index', compact('model'));
     }
 
@@ -54,13 +53,14 @@ class PessoaController extends Controller
     public function store(Request $request)
     {
         $model = new Pessoa($request->all());
-        
-        if (!$model->validate())
+
+        if (!$model->validate()) {
             $this->throwValidationException($request, $model->_validator);
-        
+        }
+
         $model->save();
         Session::flash('flash_create', 'Registro inserido.');
-        return redirect("pessoa/$model->codpessoa");    
+        return redirect("pessoa/$model->codpessoa");
     }
 
     /**
@@ -71,9 +71,9 @@ class PessoaController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $model = Pessoa::find($id);
+        $model     = Pessoa::find($id);
         $cobrancas = CobrancaHistorico::byPessoa($id)->paginate(10);
-        $spcs = RegistroSpc::byPessoa($id)->paginate(10);
+        $spcs      = RegistroSpc::byPessoa($id)->paginate(10);
         return view('pessoa.show', compact('model', 'estados', 'cobrancas', 'spcs'));
     }
 
@@ -86,7 +86,7 @@ class PessoaController extends Controller
     public function edit($id)
     {
         $model = Pessoa::findOrFail($id);
-        return view('pessoa.edit',  compact('model'));
+        return view('pessoa.edit', compact('model'));
     }
 
     /**
@@ -101,49 +101,50 @@ class PessoaController extends Controller
         $model = Pessoa::findOrFail($id);
         $model->fill($request->all());
 
-        if (!$model->validate())
+        if (!$model->validate()) {
             $this->throwValidationException($request, $model->_validator);
+        }
 
         if ($request->input('cliente') == 1) {
-            $model->cliente = TRUE;
+            $model->cliente = true;
         } else {
-            $model->cliente = FALSE;
-        }        
+            $model->cliente = false;
+        }
 
         if ($request->input('fornecedor') == 1) {
-            $model->fornecedor = TRUE;
+            $model->fornecedor = true;
         } else {
-            $model->fornecedor = FALSE;
-        }        
+            $model->fornecedor = false;
+        }
 
         if ($request->input('fisica') == 1) {
-            $model->fisica = TRUE;
+            $model->fisica = true;
         } else {
-            $model->fisica = FALSE;
-        }        
+            $model->fisica = false;
+        }
 
         if ($request->input('consumidor') == 1) {
-            $model->consumidor = TRUE;
+            $model->consumidor = true;
         } else {
-            $model->consumidor = FALSE;
-        }        
+            $model->consumidor = false;
+        }
 
         if ($request->input('creditobloqueado') == 1) {
-            $model->creditobloqueado = TRUE;
+            $model->creditobloqueado = true;
         } else {
-            $model->creditobloqueado = FALSE;
-        }        
+            $model->creditobloqueado = false;
+        }
 
         if ($request->input('vendedor') == 1) {
-            $model->vendedor = TRUE;
+            $model->vendedor = true;
         } else {
-            $model->vendedor = FALSE;
-        }        
-        
+            $model->vendedor = false;
+        }
+
         $model->save();
-        
+
         Session::flash('flash_update', 'Registro atualizado.');
-        return redirect("pessoa/$model->codpessoa"); 
+        return redirect("pessoa/$model->codpessoa");
     }
 
     /**
@@ -154,28 +155,27 @@ class PessoaController extends Controller
      */
     public function destroy($id)
     {
-        try{
+        try {
             Pessoa::find($id)->delete();
             Session::flash('flash_delete', 'Registro deletado!');
             return Redirect::route('pessoa.index');
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             return view('errors.fk');
-        }     
+        }
     }
 
     public function ajax(Request $request)
     {
-        if($request->get('q')) {
+        if ($request->get('q')) {
             $query = Pessoa::pessoa($request->get('q'))
-                    ->select('codpessoa as id', 'pessoa', 'fantasia', 'cnpj', 'inativo')
-                    ->paginate(10);
-                    //->take(10)->get();
+                ->select('codpessoa as id', 'pessoa', 'fantasia', 'cnpj', 'inativo')
+                ->paginate(10);
+            //->take(10)->get();
             return response()->json($query/*['items' => $query]*/);
-            
-        } elseif($request->get('id')) {
+
+        } elseif ($request->get('id')) {
             $query = Pessoa::find($request->get('id'));
             return response()->json($query);
         }
-    } 
+    }
 }

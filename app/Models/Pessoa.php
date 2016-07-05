@@ -492,4 +492,9 @@ class Pessoa extends MGModel
     {
         return self::orderBy('pessoa', 'asc');
     }
+
+    public static function vendedoresOrdenadoPorNome()
+    {
+        return self::where('vendedor', true)->orderBy('pessoa', 'asc');
+    }
 }
